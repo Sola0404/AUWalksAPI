@@ -26,3 +26,14 @@ Representational State Transfer
 - `dotnet ef migrations add InitialCreate`
 - Run the Sql docker container and connecting to sql server in Azure Data Studio
 - `dotnet ef database update`
+
+## DTOs
+
+Data Transfer Objects
+
+- Used to transfer data between different layers
+- Typically contain a subset of the properties in the domain model
+- For example transferring data over a network
+- Once we get data from db in domain model, it would be mapping to DTOs, and DTOs will be sent back to client
+- Client would send DTOs and be mapped to domain models and sent to db
+- [Example](https://github.com/Sola0404/AUWalksAPI/blob/main/AUWalksAPI/Controllers/RegionsController.cs)

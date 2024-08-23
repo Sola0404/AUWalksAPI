@@ -1,4 +1,5 @@
 using AUWalksAPI.Data;
+using AUWalksAPI.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AUWalksAPI.Controllers
@@ -17,14 +18,31 @@ namespace AUWalksAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
+            // get data from database - domain models
             var regions = _dbContext.Regions.ToList();
-            return Ok(regions);
+
+            // map domain models to DTOs
+            var regionsDto = new List<RegionDto>();
+            foreach (var region in regions)
+            {
+                regionsDto.Add(new RegionDto()
+                {
+                    Id = region.Id,
+                    Code = region.Code,
+                    Name = region.Name,
+                    RegionImageUrl = region.RegionImageUrl,
+                });
+            }
+
+            // return DTOs
+            return Ok(regionsDto);
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
         public IActionResult GetById([FromRoute] Guid id)
         {
+            // get region domain model from database
             // var region = _dbContext.Regions.Find(id);
             var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
 
@@ -32,7 +50,18 @@ namespace AUWalksAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(region);
+
+            // Map region domain model to region DTO
+            var regionDto = new RegionDto()
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImageUrl = region.RegionImageUrl,
+            };
+
+            // Return Dto back to client
+            return Ok(regionDto);
         }
     }
 }
