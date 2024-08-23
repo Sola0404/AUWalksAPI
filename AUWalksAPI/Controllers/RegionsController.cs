@@ -1,4 +1,5 @@
 using AUWalksAPI.Data;
+using AUWalksAPI.Models.Domain;
 using AUWalksAPI.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,6 +63,33 @@ namespace AUWalksAPI.Controllers
 
             // Return Dto back to client
             return Ok(regionDto);
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto)
+        {
+            // Map DTO to domain model
+            var region = new Region()
+            {
+                Code = addRegionRequestDto.Code,
+                Name = addRegionRequestDto.Name,
+                RegionImageUrl = addRegionRequestDto.RegionImageUrl,
+            };
+
+            // Use domain model to create Region
+            _dbContext.Regions.Add(region);
+            _dbContext.SaveChanges();
+
+            // Map domain model back to DTO
+            var regionDto = new RegionDto()
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImageUrl = region.RegionImageUrl
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = region.Id }, regionDto);
         }
     }
 }
