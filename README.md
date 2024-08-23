@@ -20,3 +20,9 @@ Representational State Transfer
 - Design pattern to increase maintainability, testability
 - DI built into ASP.NET Core
 - DI container is responsible for creating and managing instances
+
+## Run Migrations and Update Db
+
+- `dotnet ef migrations add InitialCreate`
+- Run the Sql docker container and connecting to sql server in Azure Data Studio
+- `dotnet ef database update`
