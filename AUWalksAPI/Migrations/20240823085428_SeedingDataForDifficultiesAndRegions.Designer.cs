@@ -4,6 +4,7 @@ using AUWalksAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AUWalksAPI.Migrations
 {
     [DbContext(typeof(AUWalksDbContext))]
-    partial class AUWalksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240823085428_SeedingDataForDifficultiesAndRegions")]
+    partial class SeedingDataForDifficultiesAndRegions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
