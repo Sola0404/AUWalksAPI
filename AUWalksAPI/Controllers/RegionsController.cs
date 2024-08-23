@@ -2,6 +2,7 @@ using AUWalksAPI.Data;
 using AUWalksAPI.Models.Domain;
 using AUWalksAPI.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AUWalksAPI.Controllers
 {
@@ -17,10 +18,10 @@ namespace AUWalksAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             // get data from database - domain models
-            var regions = _dbContext.Regions.ToList();
+            var regions = await _dbContext.Regions.ToListAsync();
 
             // map domain models to DTOs
             var regionsDto = new List<RegionDto>();
@@ -41,11 +42,11 @@ namespace AUWalksAPI.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public IActionResult GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             // get region domain model from database
             // var region = _dbContext.Regions.Find(id);
-            var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var region = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
             if (region == null)
             {
@@ -66,7 +67,7 @@ namespace AUWalksAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto)
+        public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
             // Map DTO to domain model
             var region = new Region()
@@ -77,8 +78,8 @@ namespace AUWalksAPI.Controllers
             };
 
             // Use domain model to create Region
-            _dbContext.Regions.Add(region);
-            _dbContext.SaveChanges();
+            await _dbContext.Regions.AddAsync(region);
+            await _dbContext.SaveChangesAsync();
 
             // Map domain model back to DTO
             var regionDto = new RegionDto()
@@ -94,9 +95,9 @@ namespace AUWalksAPI.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
-            var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var region = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
             if (region == null)
             {
                 return NotFound();
@@ -107,7 +108,7 @@ namespace AUWalksAPI.Controllers
             region.Name = updateRegionRequestDto.Name;
             region.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             // Map domain model to Dto
             var regionDto = new RegionDto()
@@ -123,9 +124,9 @@ namespace AUWalksAPI.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        public IActionResult Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var region = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
             if (region == null)
             {
@@ -133,7 +134,7 @@ namespace AUWalksAPI.Controllers
             }
 
             _dbContext.Regions.Remove(region);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             var regionDto = new RegionDto()
             {
