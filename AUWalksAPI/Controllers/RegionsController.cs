@@ -91,5 +91,34 @@ namespace AUWalksAPI.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = region.Id }, regionDto);
         }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
+        {
+            var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            if (region == null)
+            {
+                return NotFound();
+            }
+
+            // Map Dto to domain model
+            region.Code = updateRegionRequestDto.Code;
+            region.Name = updateRegionRequestDto.Name;
+            region.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
+
+            _dbContext.SaveChanges();
+
+            // Map domain model to Dto
+            var regionDto = new RegionDto()
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImageUrl = region.RegionImageUrl
+            };
+
+            return Ok(regionDto);
+        }
     }
 }
