@@ -1,4 +1,5 @@
 using AUWalksAPI.Data;
+using AUWalksAPI.Mappings;
 using AUWalksAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<AUWalksDbContext>(options =>
 // Register the SQLRegionRepository as the implementation of the IRegionRepository
 // Whenever a service requests an IRegionRepository, the SQLRegionRepository will be provided
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 

@@ -1,9 +1,8 @@
-using AUWalksAPI.Data;
+using AutoMapper;
 using AUWalksAPI.Models.Domain;
 using AUWalksAPI.Models.DTO;
 using AUWalksAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AUWalksAPI.Controllers
 {
@@ -12,12 +11,12 @@ namespace AUWalksAPI.Controllers
     [ApiController]
     public class RegionsController : ControllerBase
     {
-        private readonly AUWalksDbContext _dbContext;
         private readonly IRegionRepository _regionRepository;
-        public RegionsController(AUWalksDbContext dbContext, IRegionRepository regionRepository)
+        private readonly IMapper _mapper;
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
             _regionRepository = regionRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -27,17 +26,7 @@ namespace AUWalksAPI.Controllers
             var regions = await _regionRepository.GetAllAsync();
 
             // map domain models to DTOs
-            var regionsDto = new List<RegionDto>();
-            foreach (var region in regions)
-            {
-                regionsDto.Add(new RegionDto()
-                {
-                    Id = region.Id,
-                    Code = region.Code,
-                    Name = region.Name,
-                    RegionImageUrl = region.RegionImageUrl,
-                });
-            }
+            var regionsDto = _mapper.Map<List<RegionDto>>(regions);
 
             // return DTOs
             return Ok(regionsDto);
@@ -57,13 +46,7 @@ namespace AUWalksAPI.Controllers
             }
 
             // Map region domain model to region DTO
-            var regionDto = new RegionDto()
-            {
-                Id = region.Id,
-                Code = region.Code,
-                Name = region.Name,
-                RegionImageUrl = region.RegionImageUrl,
-            };
+            var regionDto = _mapper.Map<RegionDto>(region);
 
             // Return Dto back to client
             return Ok(regionDto);
@@ -73,24 +56,13 @@ namespace AUWalksAPI.Controllers
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
             // Map DTO to domain model
-            var region = new Region()
-            {
-                Code = addRegionRequestDto.Code,
-                Name = addRegionRequestDto.Name,
-                RegionImageUrl = addRegionRequestDto.RegionImageUrl,
-            };
+            var region = _mapper.Map<Region>(addRegionRequestDto);
 
             // Use domain model to create Region
             region = await _regionRepository.CreateAsync(region);
 
             // Map domain model back to DTO
-            var regionDto = new RegionDto()
-            {
-                Id = region.Id,
-                Code = region.Code,
-                Name = region.Name,
-                RegionImageUrl = region.RegionImageUrl
-            };
+            var regionDto = _mapper.Map<RegionDto>(region);
 
             return CreatedAtAction(nameof(GetById), new { id = region.Id }, regionDto);
         }
@@ -99,13 +71,7 @@ namespace AUWalksAPI.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
-            var region = new Region()
-            {
-                Id = id,
-                Code = updateRegionRequestDto.Code,
-                Name = updateRegionRequestDto.Name,
-                RegionImageUrl = updateRegionRequestDto.RegionImageUrl
-            };
+            var region = _mapper.Map<Region>(updateRegionRequestDto);
 
             region = await _regionRepository.UpdateAsync(id, region);
 
@@ -115,13 +81,7 @@ namespace AUWalksAPI.Controllers
             }
 
             // Map domain model to Dto
-            var regionDto = new RegionDto()
-            {
-                Id = region.Id,
-                Code = region.Code,
-                Name = region.Name,
-                RegionImageUrl = region.RegionImageUrl
-            };
+            var regionDto = _mapper.Map<RegionDto>(region);
 
             return Ok(regionDto);
         }
@@ -137,13 +97,7 @@ namespace AUWalksAPI.Controllers
                 return NotFound();
             }
 
-            var regionDto = new RegionDto()
-            {
-                Id = region.Id,
-                Code = region.Code,
-                Name = region.Name,
-                RegionImageUrl = region.RegionImageUrl
-            };
+            var regionDto = _mapper.Map<RegionDto>(region);
             return Ok(regionDto);
         }
     }
