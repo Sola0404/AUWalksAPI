@@ -37,3 +37,11 @@ Data Transfer Objects
 - Once we get data from db in domain model, it would be mapping to DTOs, and DTOs will be sent back to client
 - Client would send DTOs and be mapped to domain models and sent to db
 - [Example](https://github.com/Sola0404/AUWalksAPI/blob/main/AUWalksAPI/Controllers/RegionsController.cs)
+
+## Repository Pattern
+
+- Design pattern to separate the data access layer from the application
+- Provides interface without exposing implementation
+- Helps create abstraction
+- Controllers should not have direct access to DbContext
+- Repository will have access to DbContext and will be injected into controllers

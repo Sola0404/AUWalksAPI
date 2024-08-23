@@ -1,4 +1,5 @@
 using AUWalksAPI.Data;
+using AUWalksAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AUWalksDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AUWalksConnectionString")));
+
+// Register the SQLRegionRepository as the implementation of the IRegionRepository
+// Whenever a service requests an IRegionRepository, the SQLRegionRepository will be provided
+builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 
 var app = builder.Build();
 
