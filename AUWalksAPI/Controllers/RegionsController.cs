@@ -120,5 +120,29 @@ namespace AUWalksAPI.Controllers
 
             return Ok(regionDto);
         }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+
+            if (region == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Regions.Remove(region);
+            _dbContext.SaveChanges();
+
+            var regionDto = new RegionDto()
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImageUrl = region.RegionImageUrl
+            };
+            return Ok(regionDto);
+        }
     }
 }
