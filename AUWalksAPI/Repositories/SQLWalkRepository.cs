@@ -34,5 +34,24 @@ namespace AUWalksAPI.Repositories
             await _dbContext.SaveChangesAsync();
             return walk;
         }
+
+        public async Task<Walk?> UpdateAsync(Guid id, Walk walk)
+        {
+            var existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
+            if (existingWalk == null)
+            {
+                return null;
+            }
+
+            existingWalk.Name = walk.Name;
+            existingWalk.Description = walk.Description;
+            existingWalk.LengthInKm = walk.LengthInKm;
+            existingWalk.WalkImageUrl = walk.WalkImageUrl;
+            existingWalk.DifficultyId = walk.DifficultyId;
+            existingWalk.RegionId = walk.RegionId;
+
+            await _dbContext.SaveChangesAsync();
+            return existingWalk;
+        }
     }
 }

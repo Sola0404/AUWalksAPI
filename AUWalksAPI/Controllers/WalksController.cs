@@ -57,5 +57,22 @@ namespace AUWalksAPI.Controllers
             var WalkDto = _mapper.Map<WalkDto>(walk);
             return Ok(WalkDto);
         }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateWalkRequestDto updateWalkRequestDto)
+        {
+            var walk = _mapper.Map<Walk>(updateWalkRequestDto);
+
+            walk = await _walkRepository.UpdateAsync(id, walk);
+            if (walk == null)
+            {
+                return NotFound();
+            }
+
+            // Map domain model to DTO
+            var walkDto = _mapper.Map<WalkDto>(walk);
+            return Ok(walkDto);
+        }
     }
 }
