@@ -45,3 +45,8 @@ Data Transfer Objects
 - Helps create abstraction
 - Controllers should not have direct access to DbContext
 - Repository will have access to DbContext and will be injected into controllers
+
+## Navigation Properties
+
+- Allow to navigate from one entity to another
+- Walks domain model will have Region navigation property
