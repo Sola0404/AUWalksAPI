@@ -74,5 +74,20 @@ namespace AUWalksAPI.Controllers
             var walkDto = _mapper.Map<WalkDto>(walk);
             return Ok(walkDto);
         }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var deletedWalk = await _walkRepository.DeleteAsync(id);
+            if (deletedWalk == null)
+            {
+                return NotFound();
+            }
+
+            // Map domain model to DTO
+            var walkDto = _mapper.Map<WalkDto>(deletedWalk);
+            return Ok(walkDto);
+        }
     }
 }
