@@ -20,6 +20,14 @@ namespace AUWalksAPI.Repositories
                 .ToListAsync();
         }
 
+        public async Task<Walk?> GetByIdAsync(Guid id)
+        {
+            return await _dbContext.Walks
+                .Include("Difficulty")
+                .Include("Region")
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<Walk> CreateAsync(Walk walk)
         {
             await _dbContext.Walks.AddAsync(walk);
