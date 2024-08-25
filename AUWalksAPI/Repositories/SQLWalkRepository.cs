@@ -1,5 +1,6 @@
 using AUWalksAPI.Data;
 using AUWalksAPI.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace AUWalksAPI.Repositories
 {
@@ -9,6 +10,11 @@ namespace AUWalksAPI.Repositories
         public SQLWalkRepository(AUWalksDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<List<Walk>> GetAllAsync()
+        {
+            return await _dbContext.Walks.ToListAsync();
         }
 
         public async Task<Walk> CreateAsync(Walk walk)

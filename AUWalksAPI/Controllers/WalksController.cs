@@ -19,6 +19,16 @@ namespace AUWalksAPI.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var walks = await _walkRepository.GetAllAsync();
+
+            // Map domain model to DTO
+            var walkDtos = _mapper.Map<List<WalkDto>>(walks);
+            return Ok(walkDtos);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddWalkRequestDto addWalkRequestDto)
         {
