@@ -55,35 +55,48 @@ namespace AUWalksAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
-            // Map DTO to domain model
-            var region = _mapper.Map<Region>(addRegionRequestDto);
+            if (ModelState.IsValid)
+            {
+                // Map DTO to domain model
+                var region = _mapper.Map<Region>(addRegionRequestDto);
 
-            // Use domain model to create Region
-            region = await _regionRepository.CreateAsync(region);
+                // Use domain model to create Region
+                region = await _regionRepository.CreateAsync(region);
 
-            // Map domain model back to DTO
-            var regionDto = _mapper.Map<RegionDto>(region);
+                // Map domain model back to DTO
+                var regionDto = _mapper.Map<RegionDto>(region);
 
-            return CreatedAtAction(nameof(GetById), new { id = region.Id }, regionDto);
+                return CreatedAtAction(nameof(GetById), new { id = region.Id }, regionDto);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
-            var region = _mapper.Map<Region>(updateRegionRequestDto);
-
-            region = await _regionRepository.UpdateAsync(id, region);
-
-            if (region == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                var region = _mapper.Map<Region>(updateRegionRequestDto);
+
+                region = await _regionRepository.UpdateAsync(id, region);
+
+                if (region == null)
+                {
+                    return NotFound();
+                }
+
+                // Map domain model to Dto
+                var regionDto = _mapper.Map<RegionDto>(region);
+                return Ok(regionDto);
             }
-
-            // Map domain model to Dto
-            var regionDto = _mapper.Map<RegionDto>(region);
-
-            return Ok(regionDto);
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpDelete]
