@@ -8,7 +8,7 @@ namespace AUWalksAPI.Data
         // Using base(dbContextOptions) to pass the dbContextOptions parameter received by AUWalksDbContext
         // to the constructor of the DbContext base class.
         // DbContextOptions contain configuration information, like connection strings, model configurations, etc.
-        public AUWalksDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        public AUWalksDbContext(DbContextOptions<AUWalksDbContext> dbContextOptions) : base(dbContextOptions)
         {
 
         }

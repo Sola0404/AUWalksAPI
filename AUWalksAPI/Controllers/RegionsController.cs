@@ -3,6 +3,7 @@ using AUWalksAPI.CustomActionFilters;
 using AUWalksAPI.Models.Domain;
 using AUWalksAPI.Models.DTO;
 using AUWalksAPI.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AUWalksAPI.Controllers
@@ -10,6 +11,7 @@ namespace AUWalksAPI.Controllers
     // http://localhost:5062/api/regions
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RegionsController : ControllerBase
     {
         private readonly IRegionRepository _regionRepository;

@@ -26,6 +26,7 @@ Representational State Transfer
 - `dotnet ef migrations add InitialCreate`
 - Run the Sql docker container and connecting to sql server in Azure Data Studio
 - `dotnet ef database update`
+- When there are more than 1 dbcontext, specify which one to update `dotnet ef migrations add CreateAuthDatabase --context AUWalksAuthDbContext`
 
 ## DTOs
 

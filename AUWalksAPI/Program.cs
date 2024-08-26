@@ -18,6 +18,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AUWalksDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AUWalksConnectionString")));
 
+builder.Services.AddDbContext<AUWalksAuthDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AUWalksAuthConnectionString")));
+
 // Register the SQLRegionRepository as the implementation of the IRegionRepository
 // Whenever a service requests an IRegionRepository, the SQLRegionRepository will be provided
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
