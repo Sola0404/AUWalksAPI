@@ -20,10 +20,11 @@ namespace AUWalksAPI.Controllers
             _mapper = mapper;
         }
 
+        // GET: /api/walks?filterOn={ColumnName}&filterQuery=Track
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
-            var walks = await _walkRepository.GetAllAsync();
+            var walks = await _walkRepository.GetAllAsync(filterOn, filterQuery);
 
             // Map domain model to DTO
             var walkDtos = _mapper.Map<List<WalkDto>>(walks);
