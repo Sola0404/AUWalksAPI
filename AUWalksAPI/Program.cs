@@ -26,6 +26,7 @@ builder.Services.AddDbContext<AUWalksAuthDbContext>(options =>
 // Whenever a service requests an IRegionRepository, the SQLRegionRepository will be provided
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 builder.Services.AddScoped<IWalkRepository, SQLWalkRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

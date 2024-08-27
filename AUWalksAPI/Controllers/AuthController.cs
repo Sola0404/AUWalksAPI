@@ -1,4 +1,5 @@
 using AUWalksAPI.Models.DTO;
+using AUWalksAPI.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,11 @@ namespace AUWalksAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
-        public AuthController(UserManager<IdentityUser> userManager)
+        private readonly ITokenRepository _tokenRepository;
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             _userManager = userManager;
+            _tokenRepository = tokenRepository;
         }
 
         // POST: /api/auth/register
@@ -56,9 +59,19 @@ namespace AUWalksAPI.Controllers
 
                 if (checkPasswordResult)
                 {
-                    // Create token
+                    var roles = await _userManager.GetRolesAsync(user);
 
-                    return Ok();
+                    if (roles != null)
+                    {
+                        // Create token
+                        var jwtToken = _tokenRepository.CreateJWTToken(user, roles.ToList());
+
+                        var response = new LoginResponseDto
+                        {
+                            JwtToken = jwtToken
+                        };
+                        return Ok(response);
+                    }
                 }
             }
 
