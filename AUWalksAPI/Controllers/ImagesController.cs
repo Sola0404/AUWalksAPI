@@ -1,4 +1,6 @@
+using AUWalksAPI.Models.Domain;
 using AUWalksAPI.Models.DTO;
+using AUWalksAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AUWalksAPI.Controllers
@@ -7,6 +9,12 @@ namespace AUWalksAPI.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
+        private readonly IImageRepository _imageRepository;
+        public ImagesController(IImageRepository imageRepository)
+        {
+            _imageRepository = imageRepository;
+        }
+
         [HttpPost]
         [Route("upload")]
         public async Task<IActionResult> Upload([FromForm] ImageUploadRequestDto request)
@@ -15,7 +23,19 @@ namespace AUWalksAPI.Controllers
 
             if (ModelState.IsValid)
             {
+                // Convert Dto to Domain model
+                var image = new Image
+                {
+                    File = request.File,
+                    FileExtension = Path.GetExtension(request.File.FileName),
+                    FileSizeInBytes = request.File.Length,
+                    FileName = request.FileName,
+                    FileDescription = request.FileDescription
+                };
+
                 // Use repository to upload image
+                image = await _imageRepository.Upload(image);
+                return Ok(image);
             }
 
             return BadRequest(ModelState);
