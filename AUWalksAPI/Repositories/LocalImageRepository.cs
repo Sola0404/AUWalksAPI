@@ -26,7 +26,7 @@ namespace AUWalksAPI.Repositories
             using var stream = new FileStream(localFilePath, FileMode.Create);
             await image.File.CopyToAsync(stream);
 
-            // http://localhost:5062/images/{filename}.{extension}
+            // http://localhost:5062/images/{filename}{extension}
             var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/images/{image.FileName}{image.FileExtension}";
 
             image.FilePath = urlFilePath;
