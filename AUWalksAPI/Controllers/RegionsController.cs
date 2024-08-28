@@ -15,24 +15,36 @@ namespace AUWalksAPI.Controllers
     {
         private readonly IRegionRepository _regionRepository;
         private readonly IMapper _mapper;
-        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
+        private readonly ILogger<RegionsController> _logger;
+        public RegionsController(IRegionRepository regionRepository,
+             IMapper mapper,
+             ILogger<RegionsController> logger)
         {
             _regionRepository = regionRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
         [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll()
         {
-            // get data from database - domain models
-            var regions = await _regionRepository.GetAllAsync();
+            try
+            {
+                // get data from database - domain models
+                var regions = await _regionRepository.GetAllAsync();
 
-            // map domain models to DTOs
-            var regionsDto = _mapper.Map<List<RegionDto>>(regions);
+                // map domain models to DTOs
+                var regionsDto = _mapper.Map<List<RegionDto>>(regions);
 
-            // return DTOs
-            return Ok(regionsDto);
+                // return DTOs
+                return Ok(regionsDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
 
         [HttpGet]
