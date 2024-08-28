@@ -1,6 +1,7 @@
 using System.Text;
 using AUWalksAPI.Data;
 using AUWalksAPI.Mappings;
+using AUWalksAPI.Middlewares;
 using AUWalksAPI.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -109,6 +110,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

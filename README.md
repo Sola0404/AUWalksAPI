@@ -51,3 +51,9 @@ Data Transfer Objects
 
 - Allow to navigate from one entity to another
 - Walks domain model will have Region navigation property
+
+## Global Exception Handling
+
+- Handle any unhandled exceptions
+- Create consistent error responses
+- Avoid repeating error handling code in every controller
