@@ -68,5 +68,19 @@ namespace AUWalksUI.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var response = await client.GetFromJsonAsync<RegionDto>($"http://localhost:5062/api/regions/{id}");
+
+            if (response is not null)
+            {
+                return View(response);
+            }
+            return View(null);
+        }
     }
 }
