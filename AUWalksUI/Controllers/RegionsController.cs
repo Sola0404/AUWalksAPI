@@ -82,5 +82,30 @@ namespace AUWalksUI.Controllers
             }
             return View(null);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(RegionDto request)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var httpRequestMessage = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"http://localhost:5062/api/regions/{request.Id}"),
+                Content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
+            };
+
+            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
+            httpResponseMessage.EnsureSuccessStatusCode();
+
+            var response = await httpResponseMessage.Content.ReadFromJsonAsync<RegionDto>();
+
+            if (response is not null)
+            {
+                return RedirectToAction("Index", "Regions");
+            }
+
+            return View();
+        }
     }
 }
