@@ -1,6 +1,5 @@
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using AUWalksUI.Models;
 using AUWalksUI.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -106,6 +105,26 @@ namespace AUWalksUI.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(RegionDto request)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+
+                var httpResponseMessage = await client.DeleteAsync($"http://localhost:5062/api/regions/{request.Id}");
+
+                httpResponseMessage.EnsureSuccessStatusCode();
+
+                return RedirectToAction("Index", "Regions");
+            }
+            catch (Exception ex)
+            {
+                // Console
+            }
+            return View("Edit");
         }
     }
 }
